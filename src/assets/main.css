@@ -1,35 +1,46 @@
 @import './base.css';
+@import "../../node_modules/purecss/build/pure-min.css";
 
-#app {
-  max-width: 1280px;
+
+.layout {
   margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
+  position: relative;
+  left: 0;
+  padding-left: 0;
 }
-
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
-}
-
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
-}
-
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
+  .layout.active #menu {
+      left: 150px;
+      width: 150px;
   }
 
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
+  .layout.active .menu-link {
+      left: 150px;
   }
+
+.content {
+  margin: 0 auto;
+  padding: 0 2em;
+  max-width: 800px;
+  margin-bottom: 50px;
+  line-height: 1.6em;
 }
+
+header {
+  margin: 0;
+  color: #333;
+  border-bottom: 1px solid #eee;
+  
+}
+  header .pure-menu-horizontal {
+    margin: 0 auto;
+    max-width: 1280px;
+    /* max-width: 800px; */
+  }
+  header .pure-menu-heading {
+    text-transform: none;
+  }
+
+form.pure-form button[type="submit"] {
+    margin-left:5px
+
+  }
