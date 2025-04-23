@@ -5,18 +5,21 @@ interface Letter {
   symbol: string
   translation: string[]
   prononciation: string
+  tags: string[]
 }
 
 const props = defineProps(['alphabet'])
 const alphabetName = props.alphabet
 
+let alphabet: Letter[] = []
 const letters = ref<Letter[]>([])
 const loaded = ref(false)
 const text = ref('')
-const done = []
+let done: Letter[] = []
 const current = ref<Letter | null>(null)
 const result = ref<boolean | null>(null)
-
+const options = ref<Map<string, boolean>>(new Map())
+const crowns = ref(0)
 
 let timer: number
 function fadeResult(res: boolean) {
@@ -34,27 +37,56 @@ function submit() {
   } else {
     fadeResult(false)
   }
+  if (done.length == letters.value.length) {
+    crowns.value++
+    resetAlphabet()
+  }
+}
+
+function setOption(option: string) {
+  const val = options.value.get(option)
+  console.log(option, val)
+  if (val == undefined) {
+    return
+  }
+  options.value.set(option, !val)
+  resetAlphabet()
+}
+
+function resetAlphabet() {
+  letters.value = shuffle(alphabet.filter(l => l.tags.every(t => options.value.get(t))))
+  startQuizz()
 }
 
 function parseAlphabet(data: string): Letter[] {
   let letters = []
+  const map = new Map<string, boolean>()
   for (let l of data.split('\n')) {
     const match = l.split(';')
+    const tags = match[4].split("|")
     letters.push({
       symbol: match[0],
       translation: match[1].split('|'),
-      prononciation: match[2]
+      prononciation: match[2],
+      tags: tags
     })
+    for (const tag of tags) {
+      if (!map.has(tag)) {
+        map.set(tag, true)
+      }
+    }
   }
+  options.value = map
   return letters
 }
 
 function fetchAlphabet() {
-  const url = `/data/${alphabetName}.csv`
+  const url = `data/${alphabetName}.csv`
   return fetch(url).
     then(res => res.text()).
     then((data) => {
-      letters.value = shuffle(parseAlphabet(data))
+      alphabet = parseAlphabet(data)
+      letters.value = shuffle(alphabet)
       loaded.value = true
     })
 }
@@ -72,11 +104,12 @@ function shuffle<T>(array: T[]) {
 }
 
 function startQuizz() {
+  done = []
   current.value = letters.value[done.length]
 }
 
 function nextQuestion() {
-  done.push(current.value)
+  done.push(current.value as Letter)
   current.value = letters.value[done.length]
   text.value = ""
 }
@@ -89,36 +122,69 @@ onMounted(() => {
 
 <template>
   <!-- <h3 class="alphabet-title">{{ alphabetName }}</h3> -->
-  <div v-if="!loaded">
-
+  <div class="alphabet-loader" v-if="!loaded">
+    <h1>
+      🧐
+    </h1>
   </div>
-  <form class="pure-form">
-    <fieldset>
-      <legend>{{ current?.symbol }}</legend>
-      <input v-model="text" type="text" />
-      <button @click="submit" type="submit" class="pure-button pure-button-primary">></button>
-      <Transition>
-        <span class="result-icon success" v-if="result == true">✅</span>
-      </Transition>
-      <Transition>
-        <span class="result-icon wrong" v-if="result == false">❌</span>
-      </Transition>
-      <div class="quizz-result">
-        <p>{{ done.length }}/ {{ letters.length }}</p>
-      </div>
-    </fieldset>
+  <div v-if="loaded">
 
-  </form>
-  <ul v-if="loaded">
-    <li v-for="letter in letters">
-      {{ letter.symbol }}: {{ letter.translation }}
-    </li>
-  </ul>
+    <div class="alphabet-options">
+      <template v-for="option in options">
+        <button class="github-button" :class="{ 'primary': option[1] }" @click="setOption(option[0])">
+          <span v-if="option[1]">✔️</span>
+          {{ option[0] }}
+          Kana</button>
+      </template>
+    </div>
+    <form class="pure-form" @submit.prevent>
+      <fieldset>
+        <legend>{{ current?.symbol }}</legend>
+        <input v-model="text" type="text" />
+        <button @click="submit" type="submit" class="pure-button pure-button-primary">></button>
+        <Transition>
+          <span class="result-icon success" v-if="result == true">✅</span>
+        </Transition>
+        <Transition>
+          <span class="result-icon wrong" v-if="result == false">❌</span>
+        </Transition>
+        <div class="quizz-result">
+          <p>{{ done.length }}/ {{ letters.length }}
+
+            <template v-for="i in crowns">
+              <span class="crown">👑</span>
+            </template>
+          </p>
+        </div>
+      </fieldset>
+    </form>
+    <ul>
+      <li v-for="letter in letters.slice(done.length)">
+        {{ letter.symbol }}: {{ letter.translation.join(", ") }} ({{ letter.tags.join(", ") }})
+      </li>
+    </ul>
+  </div>
+
 </template>
 
 
 
 <style scoped>
+.alphabet-loader {
+  font-size: 4vh;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transform: -webkit-translate(-50%, -50%);
+  transform: -moz-translate(-50%, -50%);
+  transform: -ms-translate(-50%, -50%);
+}
+
+.alphabet-loader h1 {
+  animation: spin 4s linear infinite
+}
+
 .alphabet-title {
   text-transform: capitalize;
 }
@@ -136,8 +202,14 @@ legend {
   border: none;
 }
 
-button[type="submit"] {
-  border-radius: 4px
+.quizz-result .crown {
+  font-size: 16pt;
+}
+
+.alphabet-options button {
+  font-size: 10pt;
+  margin-right: 4px;
+  text-transform: capitalize
 }
 
 .result-icon {
@@ -212,6 +284,13 @@ button[type="submit"] {
 
   30% {
     transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }
 </style>

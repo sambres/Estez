@@ -60,6 +60,7 @@
 
 body {
   min-height: 100vh;
+
   color: var(--color-text);
   background: var(--color-background);
   transition:
@@ -83,4 +84,101 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+main {
+  padding-top: 1em;
+}
+
+button {
+  border-radius: 4px !important;
+}
+/* CSS */
+.github-button {
+  appearance: none;
+  background-color: #FAFBFC;
+  border: 1px solid rgba(27, 31, 35, 0.15);
+  box-shadow: rgba(27, 31, 35, 0.04) 0 1px 0, rgba(255, 255, 255, 0.25) 0 1px 0 inset;
+  box-sizing: border-box;
+  color: #24292E;
+  cursor: pointer;
+  display: inline-block;
+  line-height: 20px;
+  list-style: none;
+  padding: 5px 12px;
+  position: relative;
+  transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: middle;
+  white-space: nowrap;
+  word-wrap: break-word;
+}
+
+.github-button:hover {
+  background-color: #F3F4F6;
+  text-decoration: none;
+  transition-duration: 0.1s;
+}
+
+.github-button:disabled {
+  background-color: #FAFBFC;
+  border-color: rgba(27, 31, 35, 0.15);
+  color: #959DA5;
+  cursor: default;
+}
+
+.github-button:active {
+  background-color: #EDEFF2;
+  box-shadow: rgba(225, 228, 232, 0.2) 0 1px 0 inset;
+  transition: none 0s;
+}
+
+.github-button:focus {
+  outline: 1px transparent;
+}
+
+.github-button:before {
+  display: none;
+}
+
+.github-button:-webkit-details-marker {
+  display: none;
+}
+
+/* CSS */
+.github-button.primary {
+  background-color: #2ea44f;
+  border: 1px solid rgba(27, 31, 35, .15);
+  box-shadow: rgba(27, 31, 35, .1) 0 1px 0;
+  color: #fff;
+}
+
+.github-button.primary:hover {
+  background-color: #2c974b;
+}
+
+.github-button.primary:focus {
+  box-shadow: rgba(46, 164, 79, .4) 0 0 0 3px;
+  outline: none;
+}
+
+.github-button.primary:disabled {
+  background-color: #94d3a2;
+  border-color: rgba(27, 31, 35, .1);
+  color: rgba(255, 255, 255, .8);
+}
+
+.github-button.primary:active {
+  background-color: #298e46;
+  box-shadow: rgba(20, 70, 32, .2) 0 1px 0 inset;
+}
+
+
+button.pure-button.pure-button-primary {
+  padding: 5px 12px;
+  line-height: 20px;
+  box-sizing: border-box;
+
 }
