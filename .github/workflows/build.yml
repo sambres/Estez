@@ -16,7 +16,17 @@ jobs:
       run: |
         npm install
         npm run build
-        cp -r ./dist ./build
+    - name: Checkout sambres.github.io
+      uses: actions/checkout@v4
+      with:
+        repository: "sambres/sambres.github.io"
+        path: sambres.github.io
+    - name: Update files
+      run: |
+        rm -rf sambres.github.io/assets
+        rm -rf sambres.github.io/data
+        rm -rf sambres.github.io/index.html
+        cp -r ./dist ./sambres.github.io
     - name: Set output variables
       id: vars
       run: |
@@ -27,6 +37,7 @@ jobs:
         echo "pr_title=$pr_title" >> $GITHUB_OUTPUT
         echo "pr_body=$pr_body" >> $GITHUB_OUTPUT
         echo "pr_branch=$pr_branch" >> $GITHUB_OUTPUT
+    
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v7
       with:
@@ -34,6 +45,7 @@ jobs:
         body: ${{ steps.vars.outputs.pr_body }}
         commit-message: ${{ steps.vars.outputs.pr_title }}
         branch: ${{ steps.vars.outputs.pr_branch }}
-        base: 'main'
+        base: 'master'
+        path: sambres.github.io
         token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         draft: false
