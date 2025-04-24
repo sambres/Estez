@@ -5,23 +5,25 @@ on:
   pull_request:
     branches: [ "main" ]
 
+# https://github.com/orgs/community/discussions/49745
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x, 22.x]
-
     steps:
     - uses: actions/checkout@v4
-
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-
     - name: Build
       run: |
         npm install
         npm run build
+        cp -r ./dist ./build
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v7
+      with:
+        title: 'Your PR title'
+        commit-message: commit build
+        body: 'Your PR description'
+        branch: 'branch-name-for-PR'
+        base: 'main'
+        draft: false
