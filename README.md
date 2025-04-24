@@ -2,7 +2,6 @@
 
 Alphabet Quizz 
 
-
 ## Project Setup
 
 ```sh
@@ -26,3 +25,13 @@ npm run build
 ```sh
 npm run lint
 ```
+
+## Todo
+
+- cyrillic
+- mobile responsive
+- duo & quatro options
+- different fonts
+- cookies?
+- build action
+- solution option

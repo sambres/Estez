@@ -14,6 +14,7 @@ const routes: Routes = {
   "/": { component: Quizz, props: { alphabet: "hiragana" } },
   "/hiragana": { component: Quizz, props: { alphabet: "hiragana" } },
   "/katakana": { component: Quizz, props: { alphabet: "katakana" } },
+  "/hangeul": { component: Quizz, props: { alphabet: "hangeul" } },
   "/abjad": { component: Quizz, props: { alphabet: "abjad" } }
 }
 
@@ -47,6 +48,9 @@ const currentProperties = computed<Component>(() => {
           </li>
           <li class="pure-menu-item">
             <a href="#/katakana" class="pure-menu-link">Katakana</a>
+          </li>
+          <li class="pure-menu-item">
+            <a href="#/hangeul" class="pure-menu-link">Hangeul</a>
           </li>
           <li class="pure-menu-item">
             <a href="#/abjad" class="pure-menu-link">Abjad</a>
