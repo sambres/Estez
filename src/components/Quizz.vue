@@ -61,7 +61,6 @@ function parseAlphabet(data: string): Letter[] {
   let letters = []
   const map = new Map<string, boolean>()
   for (let l of data.split('\n')) {
-    console.log(l)
     const match = l.split(';')
     const tags = match[3].split("|")
     letters.push({
@@ -127,7 +126,7 @@ onMounted(() => {
       🧐
     </h1>
   </div>
-  <div v-if="loaded">
+  <div>
 
     <div class="alphabet-options">
       <template v-for="option in options">

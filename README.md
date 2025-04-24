@@ -35,3 +35,5 @@ npm run lint
 - cookies?
 - build action
 - solution option
+- vocabulary quizz
+- arabic transliteration
