@@ -5,7 +5,7 @@ on:
   pull_request:
     branches: [ "main" ]
 
-# https://github.com/orgs/community/discussions/49745
+# https://github.com/orgs/community/discussions/73719
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -26,4 +26,5 @@ jobs:
         body: 'Your PR description'
         branch: 'branch-name-for-PR'
         base: 'main'
+        token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         draft: false
