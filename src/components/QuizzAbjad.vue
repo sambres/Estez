@@ -63,7 +63,7 @@ function parseAlphabet(data: string): Letter[] {
   const map = new Map<string, boolean>()
   for (let l of data.split('\n')) {
     const match = l.split(';')
-    const tags = match[3].split("|")
+    const tags = match[4].split("|")
     letters.push({
       symbol: match[0],
       translation: match[1].split('|'),
