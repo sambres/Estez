@@ -17,13 +17,23 @@ jobs:
         npm install
         npm run build
         cp -r ./dist ./build
+    - name: Set output variables
+      id: vars
+      run: |
+        LATEST_TAG=$(git describe --tags --always --abbrev=0)
+        pr_branch="chore-deploy-estez-$LATEST_TAGS"
+        pr_title="chore: Deploy Estez to $LATEST_TAGS"
+        pr_body="This PR was auto-generated on $(date +%d-%m-%Y)."
+        echo "pr_title=$pr_title" >> $GITHUB_OUTPUT
+        echo "pr_body=$pr_body" >> $GITHUB_OUTPUT
+        echo "pr_branch=$pr_branch" >> $GITHUB_OUTPUT
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v7
       with:
-        title: 'Your PR title'
-        commit-message: commit build
-        body: 'Your PR description'
-        branch: 'branch-name-for-PR'
+        title: ${{ steps.vars.outputs.pr_title }}
+        body: ${{ steps.vars.outputs.pr_body }}
+        commit-message: ${{ steps.vars.outputs.pr_title }}
+        branch: ${{ steps.vars.outputs.pr_branch }}
         base: 'main'
         token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         draft: false
