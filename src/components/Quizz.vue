@@ -45,7 +45,6 @@ function submit() {
 
 function setOption(option: string) {
   const val = options.value.get(option)
-  console.log(option, val)
   if (val == undefined) {
     return
   }
@@ -62,6 +61,7 @@ function parseAlphabet(data: string): Letter[] {
   let letters = []
   const map = new Map<string, boolean>()
   for (let l of data.split('\n')) {
+    console.log(l)
     const match = l.split(';')
     const tags = match[3].split("|")
     letters.push({
@@ -115,7 +115,6 @@ function nextQuestion() {
 }
 
 onMounted(() => {
-  console.log("onMounted", alphabetName)
   fetchAlphabet().then(startQuizz)
 })
 
@@ -134,8 +133,7 @@ onMounted(() => {
       <template v-for="option in options">
         <button class="github-button" :class="{ 'primary': option[1] }" @click="setOption(option[0])">
           <span v-if="option[1]">✔️</span>
-          {{ option[0] }}
-          Kana</button>
+          {{ option[0] }}</button>
       </template>
     </div>
     <form class="pure-form" @submit.prevent>

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, type Component, createApp, createCommentVNode } from 'vue'
 import Quizz from './components/Quizz.vue'
-import QuizzAbjad from './components/QuizzAbjad.vue'
 
 interface Routes {
   [path: string]: Route
@@ -15,23 +14,20 @@ const routes: Routes = {
   "/": { component: Quizz, props: { alphabet: "hiragana" } },
   "/hiragana": { component: Quizz, props: { alphabet: "hiragana" } },
   "/katakana": { component: Quizz, props: { alphabet: "katakana" } },
-  "/abjad": { component: QuizzAbjad, props: { alphabet: "abjad" } }
+  "/abjad": { component: Quizz, props: { alphabet: "abjad" } }
 }
 
 const currentPath = ref(window.location.hash.slice(1))
 
 window.addEventListener('hashchange', () => {
   currentPath.value = window.location?.hash?.slice(1)
-  console.log("salut", currentPath.value)
 })
 
 const currentRoute = () => {
-  console.log(currentPath.value)
   return routes[currentPath.value || "/"]
 }
 const currentView = computed<Component>(() => routes[currentPath.value || "/"].component)
 const currentProperties = computed<Component>(() => {
-  console.log("currentProperties", currentRoute().props)
   return routes[currentPath.value || "/"].props
 })
 
