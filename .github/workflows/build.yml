@@ -2,8 +2,7 @@ name: Build 🚀
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    tags: [ "*" ]
 
 # https://github.com/orgs/community/discussions/73719
 jobs:
