@@ -1,8 +1,7 @@
 name: Build 🚀
 on:
   push:
-    branches: [ "main" ]
-    tags: [ "*" ]
+    tags: [ "v*" ]
 
 # https://github.com/orgs/community/discussions/73719
 jobs:
@@ -16,7 +15,17 @@ jobs:
       run: |
         npm install
         npm run build
-        cp -r ./dist ./build
+    - name: Checkout sambres.github.io
+      uses: actions/checkout@v4
+      with:
+        repository: "sambres/sambres.github.io"
+        path: sambres.github.io
+    - name: Update files
+      run: |
+        rm -rf sambres.github.io/assets
+        rm -rf sambres.github.io/data
+        rm -rf sambres.github.io/index.html
+        cp -r ./dist/* ./sambres.github.io
     - name: Set output variables
       id: vars
       run: |
@@ -34,6 +43,7 @@ jobs:
         body: ${{ steps.vars.outputs.pr_body }}
         commit-message: ${{ steps.vars.outputs.pr_title }}
         branch: ${{ steps.vars.outputs.pr_branch }}
-        base: 'main'
+        base: 'master'
+        path: sambres.github.io
         token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         draft: false
