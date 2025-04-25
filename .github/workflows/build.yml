@@ -2,6 +2,7 @@ name: Build 🚀
 on:
   push:
     tags: [ "v*" ]
+    branches: [ "main" ]
 
 # https://github.com/orgs/community/discussions/73719
 jobs:
@@ -9,6 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.ref }}
+        fetch-tags: true
+        fetch-depth: 0
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
     - name: Build
@@ -18,9 +23,12 @@ jobs:
     - name: Set output variables
       id: vars
       run: |
+
         LATEST_TAG=$(git describe --tags --always --abbrev=0)
-        pr_branch="chore-deploy-estez-$LATEST_TAGS"
-        pr_title="chore: Deploy Estez to $LATEST_TAGS"
+        echo "latest tag" $LATEST_TAG
+        git tag -l
+        pr_branch="chore-deploy-estez-$LATEST_TAG"
+        pr_title="chore: Deploy Estez to $LATEST_TAG"
         pr_body="This PR was auto-generated on $(date +%d-%m-%Y)."
         echo "pr_title=$pr_title" >> $GITHUB_OUTPUT
         echo "pr_body=$pr_body" >> $GITHUB_OUTPUT
