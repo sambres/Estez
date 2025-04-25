@@ -15,6 +15,16 @@ jobs:
       run: |
         npm install
         npm run build
+    - name: Set output variables
+      id: vars
+      run: |
+        LATEST_TAG=$(git describe --tags --always --abbrev=0)
+        pr_branch="chore-deploy-estez-$LATEST_TAGS"
+        pr_title="chore: Deploy Estez to $LATEST_TAGS"
+        pr_body="This PR was auto-generated on $(date +%d-%m-%Y)."
+        echo "pr_title=$pr_title" >> $GITHUB_OUTPUT
+        echo "pr_body=$pr_body" >> $GITHUB_OUTPUT
+        echo "pr_branch=$pr_branch" >> $GITHUB_OUTPUT\
     - name: Checkout sambres.github.io
       uses: actions/checkout@v4
       with:
@@ -26,16 +36,6 @@ jobs:
         rm -rf sambres.github.io/data
         rm -rf sambres.github.io/index.html
         cp -r ./dist/* ./sambres.github.io
-    - name: Set output variables
-      id: vars
-      run: |
-        LATEST_TAG=$(git describe --tags --always --abbrev=0)
-        pr_branch="chore-deploy-estez-$LATEST_TAGS"
-        pr_title="chore: Deploy Estez to $LATEST_TAGS"
-        pr_body="This PR was auto-generated on $(date +%d-%m-%Y)."
-        echo "pr_title=$pr_title" >> $GITHUB_OUTPUT
-        echo "pr_body=$pr_body" >> $GITHUB_OUTPUT
-        echo "pr_branch=$pr_branch" >> $GITHUB_OUTPUT
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v7
       with:
