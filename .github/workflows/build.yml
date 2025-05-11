@@ -2,7 +2,6 @@ name: Build 🚀
 on:
   push:
     tags: [ "v*" ]
-    branches: [ "main" ]
 
 # https://github.com/orgs/community/discussions/73719
 jobs:
@@ -25,8 +24,6 @@ jobs:
       run: |
 
         LATEST_TAG=$(git describe --tags --always --abbrev=0)
-        echo "latest tag" $LATEST_TAG
-        git tag -l
         pr_branch="chore-deploy-estez-$LATEST_TAG"
         pr_title="chore: Deploy Estez to $LATEST_TAG"
         pr_body="This PR was auto-generated on $(date +%d-%m-%Y)."
